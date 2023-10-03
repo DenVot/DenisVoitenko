@@ -4,10 +4,8 @@ import org.task2.animals.Camel;
 import org.task2.animals.Horse;
 import org.task2.animals.charasteristics.meals.Grass;
 
-public class App
-{
-    public static void main( String[] args )
-    {
+public class App {
+    public static void main( String[] args ) {
         Grass grassForCamel = new Grass();
         Grass grassForHorse = new Grass();
 
