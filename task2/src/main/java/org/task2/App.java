@@ -14,11 +14,11 @@ public class App
         Camel camel = new Camel();
         Horse horse = new Horse();
 
-        camel.Eat(grassForCamel);
-        horse.Eat(grassForHorse);
+        camel.eat(grassForCamel);
+        horse.eat(grassForHorse);
 
         try {
-            horse.Eat(grassForHorse);
+            horse.eat(grassForHorse);
         } catch (Exception e) {
             System.out.println("Мы не можем есть уже съеденную еду");
         }

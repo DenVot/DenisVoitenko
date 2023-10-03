@@ -7,7 +7,7 @@ public abstract class Meal {
         return isMealAte;
     }
 
-    public void Eat() {
+    public void eat() {
         if (isMealAte) {
             throw new RuntimeException("Нельзя съесть еду дважды");
         }

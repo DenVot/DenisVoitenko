@@ -6,13 +6,13 @@ import org.task2.animals.charasteristics.meals.Grass;
 
 public class Camel implements Herbivorous, LandLiver {
     @Override
-    public void Eat(Grass meal) {
-        meal.Eat();
+    public void eat(Grass meal) {
+        meal.eat();
         System.out.println("Верблюд ест");
     }
 
     @Override
-    public void Walk() {
+    public void walk() {
         System.out.println("Верблюд идет");
     }
 }

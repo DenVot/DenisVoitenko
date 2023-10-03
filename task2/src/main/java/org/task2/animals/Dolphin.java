@@ -6,13 +6,13 @@ import org.task2.animals.charasteristics.meals.Fish;
 
 public class Dolphin implements Predator<Fish>, WaterLiver {
     @Override
-    public void Eat(Fish meal) {
-        meal.Eat();
+    public void eat(Fish meal) {
+        meal.eat();
         System.out.println("Дельфин ест");
     }
 
     @Override
-    public void Swim() {
+    public void swim() {
         System.out.println("Дельфин плывет");
     }
 }

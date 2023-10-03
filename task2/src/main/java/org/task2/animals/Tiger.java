@@ -6,13 +6,13 @@ import org.task2.animals.charasteristics.meals.Beef;
 
 public class Tiger implements Predator<Beef>, LandLiver {
     @Override
-    public void Eat(Beef meal) {
-        meal.Eat();
+    public void eat(Beef meal) {
+        meal.eat();
         System.out.println("Тигр ест");
     }
 
     @Override
-    public void Walk() {
+    public void walk() {
         System.out.println("Тигр идет");
     }
 }
