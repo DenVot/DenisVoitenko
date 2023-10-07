@@ -1,8 +1,8 @@
-package org.task2.animals;
+package org.denvot.animals;
 
-import org.task2.animals.charasteristics.eaters.Herbivorous;
-import org.task2.animals.charasteristics.livingPlaces.LandLiver;
-import org.task2.animals.charasteristics.meals.Grass;
+import org.denvot.animals.charasteristics.eaters.Herbivorous;
+import org.denvot.animals.charasteristics.livingPlaces.LandLiver;
+import org.denvot.animals.charasteristics.meals.Grass;
 
 public class Camel implements Herbivorous, LandLiver {
     @Override

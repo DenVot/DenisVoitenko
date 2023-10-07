@@ -1,4 +1,4 @@
-package org.task2.animals.charasteristics.meals;
+package org.denvot.animals.charasteristics.meals;
 
 public abstract class Meal {
     private boolean isMealAte = false;

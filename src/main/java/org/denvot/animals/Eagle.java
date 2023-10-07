@@ -1,8 +1,8 @@
-package org.task2.animals;
+package org.denvot.animals;
 
-import org.task2.animals.charasteristics.eaters.Predator;
-import org.task2.animals.charasteristics.livingPlaces.AirLiver;
-import org.task2.animals.charasteristics.meals.Beef;
+import org.denvot.animals.charasteristics.eaters.Predator;
+import org.denvot.animals.charasteristics.livingPlaces.AirLiver;
+import org.denvot.animals.charasteristics.meals.Beef;
 
 public class Eagle implements Predator<Beef>, AirLiver {
     @Override

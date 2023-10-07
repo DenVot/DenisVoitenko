@@ -1,8 +1,8 @@
-package org.task2.animals;
+package org.denvot.animals;
 
-import org.task2.animals.charasteristics.eaters.Predator;
-import org.task2.animals.charasteristics.livingPlaces.WaterLiver;
-import org.task2.animals.charasteristics.meals.Fish;
+import org.denvot.animals.charasteristics.eaters.Predator;
+import org.denvot.animals.charasteristics.livingPlaces.WaterLiver;
+import org.denvot.animals.charasteristics.meals.Fish;
 
 public class Dolphin implements Predator<Fish>, WaterLiver {
     @Override
