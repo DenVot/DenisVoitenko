@@ -1,5 +1,7 @@
 package org.denvot.news.data.entities;
 
+import org.denvot.news.controllers.responses.ArticleResponse;
+
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
