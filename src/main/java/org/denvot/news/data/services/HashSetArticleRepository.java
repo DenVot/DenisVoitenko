@@ -4,14 +4,15 @@ import org.denvot.news.data.entities.Article;
 import org.denvot.news.data.entities.ArticleId;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicLong;
+import java.util.function.Function;
 
 public class HashSetArticleRepository implements ArticleRepository {
   private final ConcurrentHashMap<ArticleId, Article> articles = new ConcurrentHashMap<>();
-  private long maxId = 0;
+  private final AtomicLong maxId = new AtomicLong(0);
 
   @Override
   public Article createArticle(String name, Set<String> tags) {
@@ -30,14 +31,13 @@ public class HashSetArticleRepository implements ArticleRepository {
   }
 
   @Override
-  public Article editArticle(ArticleId id, ArticleDelta delta) {
-    Article original = articles.get(id);
+  public Article editName(ArticleId id, String newName) {
+    return editArticle(id, article -> article.editName(newName));
+  }
 
-    return new Article(id,
-            delta.newText != null ?
-                    delta.newText : original.getName(),
-            original.getTags(),
-            original.getComments());
+  @Override
+  public Article editTags(ArticleId id, Set<String> newTags) {
+    return editArticle(id, article -> article.editTags(newTags));
   }
 
   @Override
@@ -46,6 +46,19 @@ public class HashSetArticleRepository implements ArticleRepository {
   }
 
   private ArticleId generateUniqueId() {
-    return new ArticleId(maxId++);
+    return new ArticleId(maxId.getAndIncrement());
+  }
+
+  private Article editArticle(ArticleId id, Function<Article, Article> deltaFunc) {
+    Optional<Article> articleOpt = getArticle(id);
+
+    if (articleOpt.isEmpty()) {
+      throw new RuntimeException("Article is null");
+    }
+
+    Article article = deltaFunc.apply(articleOpt.get());
+    articles.put(id, article);
+
+    return article;
   }
 }

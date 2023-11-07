@@ -10,4 +10,16 @@ public class Comment {
     this.articleId = articleId;
     this.text = text;
   }
+
+  public CommentId getId() {
+    return id;
+  }
+
+  public ArticleId getArticleId() {
+    return articleId;
+  }
+
+  public String getText() {
+    return text;
+  }
 }

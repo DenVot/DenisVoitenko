@@ -9,6 +9,7 @@ import java.util.Set;
 public interface ArticleRepository {
   Article createArticle(String name, Set<String> tags);
   Optional<Article> getArticle(ArticleId id);
-  Article editArticle(ArticleId id, ArticleDelta delta);
+  Article editName(ArticleId id, String newName);
+  Article editTags(ArticleId id, Set<String> newTags);
   void deleteArticle(ArticleId id);
 }
