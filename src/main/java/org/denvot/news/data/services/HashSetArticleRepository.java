@@ -4,6 +4,7 @@ import org.denvot.news.data.entities.Article;
 import org.denvot.news.data.entities.ArticleId;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -13,6 +14,11 @@ import java.util.function.Function;
 public class HashSetArticleRepository implements ArticleRepository {
   private final ConcurrentHashMap<ArticleId, Article> articles = new ConcurrentHashMap<>();
   private final AtomicLong maxId = new AtomicLong(0);
+
+  @Override
+  public List<Article> getAllArticles() {
+    return articles.values().stream().toList();
+  }
 
   @Override
   public Article createArticle(String name, Set<String> tags) {
