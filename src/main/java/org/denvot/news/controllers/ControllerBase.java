@@ -1,5 +1,5 @@
 package org.denvot.news.controllers;
 
-public interface Controller {
+public interface ControllerBase {
   void initializeEndpoints();
 }
