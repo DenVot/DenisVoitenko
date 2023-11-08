@@ -36,7 +36,6 @@ public class ArticlesController implements ControllerBase {
     deleteArticles();
     editArticle();
     getComments();
-
   }
 
   private void getAllArticles() {
