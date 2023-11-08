@@ -40,7 +40,7 @@ public class ArticlesController implements ControllerBase {
   }
 
   private void getAllArticles() {
-    sparkService.get("/articles", (request, response) -> {
+    sparkService.get("/api/articles", (request, response) -> {
       var articles = articleRepository.getAllArticles();
 
       setupSuccessJsonResponse(response);

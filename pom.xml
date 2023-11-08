@@ -67,7 +67,7 @@
             <exclude>**/*Main.*</exclude>
           </excludes>
         </configuration>
-        <executions>
+        <!--<executions>
           <execution>
             <goals>
               <goal>prepare-agent</goal>
@@ -111,7 +111,7 @@
               <outputDirectory>target/jacoco-ut</outputDirectory>
             </configuration>
           </execution>
-        </executions>
+        </executions>-->
       </plugin>
 
       <plugin>
