@@ -67,7 +67,7 @@
             <exclude>**/*Main.*</exclude>
           </excludes>
         </configuration>
-        <!--<executions>
+        <executions>
           <execution>
             <goals>
               <goal>prepare-agent</goal>
@@ -93,7 +93,7 @@
                     <limit>
                       <counter>LINE</counter>
                       <value>COVEREDRATIO</value>
-                      <minimum>0.55</minimum>
+                      <minimum>0.60</minimum>
                     </limit>
                   </limits>
                 </rule>
@@ -111,7 +111,7 @@
               <outputDirectory>target/jacoco-ut</outputDirectory>
             </configuration>
           </execution>
-        </executions>-->
+        </executions>
       </plugin>
 
       <plugin>
