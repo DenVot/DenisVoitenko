@@ -11,7 +11,7 @@ public class Article {
   private final String name;
   private final Set<String> tags;
   private final List<Comment> comments;
-  private static AtomicLong nextCommentId;
+  private final static AtomicLong nextCommentId = new AtomicLong(0);
 
   public Article(ArticleId id, String name, Set<String> tags, List<Comment> comments) {
     this.id = id;

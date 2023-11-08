@@ -35,20 +35,21 @@ public class ArticlesController implements ControllerBase {
     createArticle();
     deleteArticles();
     editArticle();
-    getComments();
   }
 
   private void getAllArticles() {
     sparkService.get("/api/articles", (request, response) -> {
+      response.type("application/json");
       var articles = articleRepository.getAllArticles();
 
       setupSuccessJsonResponse(response);
-      return objectMapper.writeValueAsString(articles);
+      return objectMapper.writeValueAsString(ArticleResponse.fromOriginal(articles));
     });
   }
 
   private void getArticle() {
     sparkService.get("/api/articles/:articleId", (request, response) -> {
+      response.type("application/json");
       try {
         var articleId = new ArticleId(
                 Long.parseLong(request.params("articleId")));
@@ -60,9 +61,9 @@ public class ArticlesController implements ControllerBase {
         }
 
         setupSuccessJsonResponse(response);
-        return objectMapper.writeValueAsString(article);
+        return objectMapper.writeValueAsString(ArticleResponse.fromOriginal(article.get()));
       } catch (NumberFormatException e) {
-        response.status(401);
+        response.status(403);
 
         return error(e.getMessage());
       }
@@ -71,6 +72,7 @@ public class ArticlesController implements ControllerBase {
 
   private void createArticle() {
     sparkService.post("/api/articles", (request, response) -> {
+      response.type("application/json");
       var body = request.body();
       var createArticleRequest = objectMapper.readValue(body, CreateArticleRequest.class);
 
@@ -79,7 +81,7 @@ public class ArticlesController implements ControllerBase {
         var article = articleRepository.createArticle(createArticleRequest.name(), tagsSet);
 
         setupSuccessJsonResponse(response);
-        return objectMapper.writeValueAsString(article);
+        return objectMapper.writeValueAsString(ArticleResponse.fromOriginal(article));
       } catch (Exception e) {
         return error(e.getMessage());
       }
@@ -88,6 +90,7 @@ public class ArticlesController implements ControllerBase {
 
   private void deleteArticles() {
     sparkService.delete("/api/articles/:articleId", (request, response) -> {
+      response.type("application/json");
       try {
         var articleId = new ArticleId(
                 Long.parseLong(request.params("articleId")));
@@ -98,7 +101,7 @@ public class ArticlesController implements ControllerBase {
 
         return objectMapper.writeValueAsString("OK");
       } catch (NumberFormatException e) {
-        response.status(401);
+        response.status(403);
 
         return error(e.getMessage());
       }
@@ -107,6 +110,7 @@ public class ArticlesController implements ControllerBase {
 
   private void editArticle() {
     sparkService.put("/api/articles/:articleId/edit", (request, response) -> {
+      response.type("application/json");
       var id = new ArticleId(Long.parseLong(request.params("articleId")));
       var newName = request.queryParams("newName");
       var newTagsStr = request.queryParams("newTags");
@@ -131,25 +135,8 @@ public class ArticlesController implements ControllerBase {
     });
   }
 
-  private void getComments() {
-    sparkService.get("/api/articles/:articleId/comments/", (request, response) -> {
-      var id = new ArticleId(Long.parseLong(request.params("articleId")));
-      var article = articleRepository.getArticle(id);
-
-      if (article.isEmpty()) {
-        response.status(401);
-        return error("Article not found");
-      }
-
-      setupSuccessJsonResponse(response);
-      return objectMapper.writeValueAsString(CommentResponse.fromOriginal(article.get().getComments()));
-    });
-  }
-
-
   private void setupSuccessJsonResponse(Response response) {
     response.status(200);
-    response.type("application/json");
   }
 
   private String error(String msg) throws JsonProcessingException {

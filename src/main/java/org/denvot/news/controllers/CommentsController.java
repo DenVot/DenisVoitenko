@@ -28,10 +28,12 @@ public class CommentsController implements ControllerBase {
   public void initializeEndpoints() {
     createComment();
     deleteComment();
+    getComments();
   }
   
   private void createComment() {
     sparkService.post("/api/articles/:articleId/comments", (request, response) -> {
+      response.type("application/json");
       var body = request.body();
 
       try {
@@ -55,6 +57,7 @@ public class CommentsController implements ControllerBase {
 
   private void deleteComment() {
     sparkService.delete("/api/articles/:articleId/comments/:commentId", (request, response) -> {
+      response.type("application/json");
       var id = new ArticleId(Long.parseLong(request.params("articleId")));
       var article = articleRepository.getArticle(id);
 
@@ -70,9 +73,24 @@ public class CommentsController implements ControllerBase {
     });
   }
 
+  private void getComments() {
+    sparkService.get("/api/articles/:articleId/comments", (request, response) -> {
+      response.type("application/json");
+      var id = new ArticleId(Long.parseLong(request.params("articleId")));
+      var article = articleRepository.getArticle(id);
+
+      if (article.isEmpty()) {
+        response.status(403);
+        return error("Article not found");
+      }
+
+      setupSuccessJsonResponse(response);
+      return objectMapper.writeValueAsString(CommentResponse.fromOriginal(article.get().getComments()));
+    });
+  }
+
   private void setupSuccessJsonResponse(Response response) {
     response.status(200);
-    response.type("application/json");
   }
 
   private String error(String msg) throws JsonProcessingException {
