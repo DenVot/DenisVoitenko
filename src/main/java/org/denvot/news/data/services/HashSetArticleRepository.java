@@ -31,7 +31,7 @@ public class HashSetArticleRepository implements ArticleRepository {
 
   @Override
   public Optional<Article> getArticle(ArticleId id) {
-    if (articles.containsKey(id)) return Optional.empty();
+    if (!articles.containsKey(id)) return Optional.empty();
 
     return Optional.of(articles.get(id));
   }
