@@ -45,9 +45,9 @@ public class Article {
 
   public void deleteComment(CommentId commentId) {
     for (Comment comment : comments) {
-      if (commentId == comment.getId()) {
+      if (commentId.equals(comment.getId())) {
         comments.remove(comment);
-        break;
+        return;
       }
     }
 

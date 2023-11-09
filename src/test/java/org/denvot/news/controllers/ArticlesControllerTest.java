@@ -2,6 +2,7 @@ package org.denvot.news.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.denvot.Application;
+import org.denvot.news.controllers.responses.ArticleResponse;
 import org.denvot.news.data.services.ArticleRepository;
 import org.denvot.news.data.services.HashSetArticleRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -81,7 +82,7 @@ class ApiPipelineTest {
             .PUT(
                 HttpRequest.BodyPublishers.ofString("")
             )
-            .uri(URI.create("http://localhost:%d/api/articles/0?newName=TestNew".formatted(service.port())))
+            .uri(URI.create("http://localhost:%d/api/articles/0/edit?newName=TestNew".formatted(service.port())))
             .build(),
         HttpResponse.BodyHandlers.ofString(UTF_8)
     );
@@ -97,5 +98,20 @@ class ApiPipelineTest {
     );
 
     assertEquals(200, response.statusCode());
+
+    response = http.send(
+            HttpRequest.newBuilder()
+                    .GET()
+                    .uri(URI.create("http://localhost:%d/api/articles/0".formatted(service.port())))
+                    .build(),
+            HttpResponse.BodyHandlers.ofString(UTF_8)
+    );
+
+    assertEquals(200, response.statusCode());
+
+    var articleResponse = objectMapper.readValue(response.body(), ArticleResponse.class);
+
+    assertEquals(0, articleResponse.comments().size());
+    assertEquals("TestNew", articleResponse.name());
   }
 }

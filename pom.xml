@@ -71,8 +71,7 @@
           <excludes>
             <exclude>**/*Main.*</exclude>
             <exclude>**/*Application.*</exclude>
-            <exclude>**controllers*</exclude>
-            <exclude>**entities**</exclude>
+            <exclude>**/responses/*</exclude>
           </excludes>
         </configuration>
         <executions>
