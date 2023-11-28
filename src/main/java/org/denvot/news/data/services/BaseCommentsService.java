@@ -4,9 +4,10 @@ import org.denvot.news.data.entities.ArticleId;
 import org.denvot.news.data.entities.Comment;
 import org.denvot.news.data.entities.CommentId;
 
-public interface CommentsRepository {
-  Comment getComment(CommentId id);
-  long createComment(ArticleId articleId, String text);
-  void deleteComment(CommentId commentId);
+import java.sql.SQLException;
+
+public interface BaseCommentsService {
+  long createComment(ArticleId articleId, String text) throws SQLException;
+  void deleteComment(CommentId commentId) throws SQLException;
   Comment[] getCommentsByArticle(ArticleId articleId);
 }

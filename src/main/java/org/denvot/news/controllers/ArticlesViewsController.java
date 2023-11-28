@@ -1,7 +1,7 @@
 package org.denvot.news.controllers;
 
 import org.denvot.news.controllers.responses.ArticleResponse;
-import org.denvot.news.data.services.ArticleRepository;
+import org.denvot.news.data.services.ArticlesRepository;
 import spark.ModelAndView;
 import spark.Service;
 import spark.template.freemarker.FreeMarkerEngine;
@@ -10,10 +10,10 @@ import java.util.HashMap;
 
 public class ArticlesViewsController implements ControllerBase {
   private final Service service;
-  private final ArticleRepository articleRepository;
+  private final ArticlesRepository articleRepository;
   private final FreeMarkerEngine freeMarkerEngine;
 
-  public ArticlesViewsController(Service service, ArticleRepository articleRepository, FreeMarkerEngine freeMarkerEngine) {
+  public ArticlesViewsController(Service service, ArticlesRepository articleRepository, FreeMarkerEngine freeMarkerEngine) {
 
     this.service = service;
     this.articleRepository = articleRepository;

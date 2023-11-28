@@ -8,7 +8,7 @@ import org.postgresql.jdbc.PgArray;
 import java.sql.SQLException;
 import java.util.*;
 
-public class MySqlArticleRepository implements ArticleRepository {
+public class MySqlArticleRepository implements ArticlesRepository {
   private final Jdbi jdbi;
 
   public MySqlArticleRepository(Jdbi jdbi) {
@@ -78,6 +78,20 @@ public class MySqlArticleRepository implements ArticleRepository {
       var res = handle.createUpdate("UPDATE article SET tags = :tags WHERE id = :id")
               .bind("id", id.getValue())
               .bind("tags", newTags)
+              .executeAndReturnGeneratedKeys()
+              .mapToMap()
+              .first();
+
+      return parseArticleFromMap(res);
+    });
+  }
+
+  @Override
+  public Article editTrending(ArticleId id, boolean isTrending) throws SQLException {
+    return jdbi.inTransaction(handle -> {
+      var res = handle.createUpdate("UPDATE article SET trending = :trending WHERE id = :id")
+              .bind("id", id.getValue())
+              .bind("tags", isTrending)
               .executeAndReturnGeneratedKeys()
               .mapToMap()
               .first();

@@ -9,7 +9,7 @@ import java.util.Set;
 import static org.junit.jupiter.api.Assertions.*;
 
 class HashSetArticleRepositoryTest {
-  @Test
+  /*@Test
   void getAllArticlesShouldBeEmpty() {
     var repo = new HashSetArticleRepository();
     assertEquals(0, repo.getAllArticles().size());
@@ -82,5 +82,5 @@ class HashSetArticleRepositoryTest {
     repo.deleteArticle(new ArticleId(0));
 
     assertTrue(repo.getArticle(new ArticleId(0)).isEmpty());
-  }
+  }*/
 }

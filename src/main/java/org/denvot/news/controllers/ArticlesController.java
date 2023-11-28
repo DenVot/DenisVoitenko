@@ -1,27 +1,16 @@
 package org.denvot.news.controllers;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.denvot.news.controllers.requests.CreateArticleRequest;
-import org.denvot.news.controllers.responses.ArticleResponse;
-import org.denvot.news.controllers.responses.CommentResponse;
-import org.denvot.news.controllers.responses.ErrorResponse;
-import org.denvot.news.data.entities.Article;
-import org.denvot.news.data.entities.ArticleId;
-import org.denvot.news.data.services.ArticleRepository;
-import spark.Response;
+import org.denvot.news.data.services.ArticlesRepository;
 import spark.Service;
-
-import java.util.Arrays;
-import java.util.HashSet;
 
 public class ArticlesController implements ControllerBase {
   private final Service sparkService;
-  private final ArticleRepository articleRepository;
+  private final ArticlesRepository articleRepository;
   private final ObjectMapper objectMapper;
 
   public ArticlesController(Service sparkService,
-                            ArticleRepository articleRepository,
+                            ArticlesRepository articleRepository,
                             ObjectMapper objectMapper) {
     this.sparkService = sparkService;
     this.articleRepository = articleRepository;

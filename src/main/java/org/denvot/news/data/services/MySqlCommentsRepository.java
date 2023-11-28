@@ -15,6 +15,15 @@ public class MySqlCommentsRepository implements CommentsRepository {
   }
 
   @Override
+  public Comment getComment(CommentId id) {
+    return parseCommentFromMap(
+            jdbi.inTransaction(handle -> handle.select("SELECT * FROM comment WHERE id = :id")
+                    .bind("id", id.getValue())
+                    .mapToMap()
+                    .first()));
+  }
+
+  @Override
   public long createComment(ArticleId articleId, String text) {
     return jdbi.inTransaction(handle -> (Long) handle.createUpdate(
               "INSERT INTO comment VALUES (:text)")

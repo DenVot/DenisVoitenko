@@ -1,24 +1,17 @@
 package org.denvot.news.controllers;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.denvot.news.controllers.requests.CreateCommentRequest;
-import org.denvot.news.controllers.responses.CommentResponse;
-import org.denvot.news.controllers.responses.ErrorResponse;
-import org.denvot.news.data.entities.ArticleId;
-import org.denvot.news.data.entities.CommentId;
-import org.denvot.news.data.services.ArticleRepository;
-import spark.Response;
+import org.denvot.news.data.services.ArticlesRepository;
 import spark.Service;
 
 public class CommentsController implements ControllerBase {
   private final Service sparkService;
   private final ObjectMapper objectMapper;
-  private final ArticleRepository articleRepository;
+  private final ArticlesRepository articleRepository;
 
   public CommentsController(Service sparkService,
                             ObjectMapper objectMapper,
-                            ArticleRepository articleRepository) {
+                            ArticlesRepository articleRepository) {
     this.sparkService = sparkService;
     this.objectMapper = objectMapper;
     this.articleRepository = articleRepository;
