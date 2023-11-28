@@ -26,11 +26,11 @@ public class CommentsController implements ControllerBase {
 
   @Override
   public void initializeEndpoints() {
-    createComment();
+    /*createComment();
     deleteComment();
-    getComments();
+    getComments();*/
   }
-  
+  /*
   private void createComment() {
     sparkService.post("/api/articles/:articleId/comments", (request, response) -> {
       response.type("application/json");
@@ -95,5 +95,5 @@ public class CommentsController implements ControllerBase {
 
   private String error(String msg) throws JsonProcessingException {
     return objectMapper.writeValueAsString(new ErrorResponse(msg));
-  }
+  }*/
 }

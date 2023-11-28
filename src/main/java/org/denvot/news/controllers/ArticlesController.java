@@ -30,14 +30,14 @@ public class ArticlesController implements ControllerBase {
 
   @Override
   public void initializeEndpoints() {
-    getAllArticles();
+    /*getAllArticles();
     getArticle();
     createArticle();
     deleteArticles();
-    editArticle();
+    editArticle();*/
   }
 
-  private void getAllArticles() {
+  /*private void getAllArticles() {
     sparkService.get("/api/articles", (request, response) -> {
       response.type("application/json");
       var articles = articleRepository.getAllArticles();
@@ -141,5 +141,5 @@ public class ArticlesController implements ControllerBase {
 
   private String error(String msg) throws JsonProcessingException {
     return objectMapper.writeValueAsString(new ErrorResponse(msg));
-  }
+  }*/
 }
