@@ -1,6 +1,8 @@
 package org.denvot;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.typesafe.config.Config;
+import com.typesafe.config.ConfigFactory;
 import freemarker.cache.ClassTemplateLoader;
 import freemarker.template.Configuration;
 import org.denvot.news.controllers.ArticlesController;
@@ -8,6 +10,7 @@ import org.denvot.news.controllers.ArticlesViewsController;
 import org.denvot.news.controllers.CommentsController;
 import org.denvot.news.controllers.ControllerBase;
 import org.denvot.news.data.services.HashSetArticleRepository;
+import org.flywaydb.core.Flyway;
 import spark.Service;
 import spark.template.freemarker.FreeMarkerEngine;
 
@@ -15,6 +18,17 @@ import java.util.ArrayList;
 
 public class Main {
     public static void main(String[] args ) {
+        Config config = ConfigFactory.load();
+
+        Flyway flyway =
+                Flyway.configure()
+                        .outOfOrder(true)
+                        .locations("classpath:db/migrations")
+                        .dataSource(config.getString("app.database.url"), config.getString("app.database.user"),
+                                config.getString("app.database.password"))
+                        .load();
+        flyway.migrate();
+
         var articleRepository = new HashSetArticleRepository();
 
         var freeMakerConfig = new Configuration(Configuration.VERSION_2_3_0);
