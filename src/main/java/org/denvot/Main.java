@@ -49,7 +49,7 @@ public class Main {
 
         controllers.add(new ArticlesController(sparkService, articleService, objMapper));
         controllers.add(new CommentsController(sparkService, objMapper, commentsService));
-        controllers.add(new ArticlesViewsController(sparkService, articleRepository, freeMakerEngine));
+        controllers.add(new ArticlesViewsController(sparkService, articleService, freeMakerEngine));
 
         var app = new Application(controllers);
         app.start();

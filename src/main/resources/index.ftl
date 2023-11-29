@@ -17,7 +17,7 @@
     <#list articles as article>
         <tr>
             <td>${article.name()}</td>
-            <td>${article.comments()?size}</td>
+            <td>${article.commentsCount()}</td>
         </tr>
     </#list>
 </table>

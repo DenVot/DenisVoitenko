@@ -19,9 +19,10 @@ public class CommentsService implements BaseCommentsService {
   @Override
   public long createComment(ArticleId articleId, String text) throws SQLException {
     var id = commentsRepository.createComment(articleId, text);
-    var commentsCount = (long) commentsRepository.getCommentsByArticle(articleId).size();
+    var commentsCount = commentsRepository.getCommentsByArticle(articleId).size();
 
     articlesRepository.editTrending(articleId, commentsCount > 3);
+    articlesRepository.editCommentCount(articleId, commentsCount);
 
     return id;
   }
@@ -33,6 +34,7 @@ public class CommentsService implements BaseCommentsService {
     var commentsCount = commentsRepository.getCommentsByArticle(articleId).size();
 
     articlesRepository.editTrending(articleId, commentsCount > 3);
+    articlesRepository.editCommentCount(articleId, commentsCount);
   }
 
   @Override

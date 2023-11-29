@@ -8,10 +8,15 @@ import org.denvot.news.controllers.responses.ErrorResponse;
 import org.denvot.news.data.entities.Article;
 import org.denvot.news.data.entities.ArticleId;
 import org.denvot.news.data.services.BaseArticleService;
+import org.denvot.news.data.services.entities.ArticleData;
 import org.denvot.news.exceptions.ArticleNotFoundException;
 import org.eclipse.jetty.http.HttpStatus;
 import spark.Response;
 import spark.Service;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class ArticlesController implements ControllerBase {
   private final Service sparkService;
@@ -70,7 +75,24 @@ public class ArticlesController implements ControllerBase {
       var body = request.body();
       var createArticleRequest = objectMapper.readValue(body, CreateArticleRequest.class);
       try {
-        var articleId = articleService.createArticle(createArticleRequest.name(), createArticleRequest.tags());
+        var articleId = articleService.createArticle(new ArticleData(createArticleRequest.name(), createArticleRequest.tags()));
+
+        setupSuccessJsonResponse(response);
+        return objectMapper.writeValueAsString(articleId);
+      } catch (Exception e) {
+        return error(e.getMessage());
+      }
+    });
+  }
+
+  private void createArticles() {
+    sparkService.post("/api/articles", (request, response) -> {
+      response.type("application/json");
+      var body = request.body();
+      var createArticleRequest = objectMapper.readValue(body, CreateArticleRequest[].class);
+      try {
+        List<ArticleData> datas = Arrays.stream(createArticleRequest).map(req -> new ArticleData(req.name(), req.tags())).toList();
+        var articleId = articleService.createArticles(datas);
 
         setupSuccessJsonResponse(response);
         return objectMapper.writeValueAsString(articleId);

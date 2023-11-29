@@ -2,6 +2,7 @@ package org.denvot.news.data.services;
 
 import org.denvot.news.data.entities.Article;
 import org.denvot.news.data.entities.ArticleId;
+import org.denvot.news.data.services.entities.ArticleData;
 import org.jdbi.v3.core.Jdbi;
 import org.postgresql.jdbc.PgArray;
 
@@ -33,11 +34,11 @@ public class MySqlArticleRepository implements ArticlesRepository {
   }
 
   @Override
-  public long createArticle(String name, String[] tags) {
+  public long createArticle(ArticleData articleData) {
     return jdbi.inTransaction(handle -> {
       var res = handle.createUpdate("INSERT INTO article (name, tags) VALUES (:name, :tags)")
-              .bind("name", name)
-              .bind("tags", tags)
+              .bind("name", articleData.name())
+              .bind("tags", articleData.tags())
               .executeAndReturnGeneratedKeys("id");
 
       var mapRes = res.mapToMap().first();
@@ -89,9 +90,29 @@ public class MySqlArticleRepository implements ArticlesRepository {
   @Override
   public Article editTrending(ArticleId id, boolean isTrending) throws SQLException {
     return jdbi.inTransaction(handle -> {
+      handle.select("SELECT * FROM article WHERE id = :id FOR UPDATE")
+              .bind("id", id.getValue());
+
       var res = handle.createUpdate("UPDATE article SET trending = :trending WHERE id = :id")
               .bind("id", id.getValue())
               .bind("trending", isTrending)
+              .executeAndReturnGeneratedKeys()
+              .mapToMap()
+              .first();
+
+      return parseArticleFromMap(res);
+    });
+  }
+
+  @Override
+  public Article editCommentCount(ArticleId id, int count) throws SQLException {
+    return jdbi.inTransaction(handle -> {
+      handle.select("SELECT * FROM article WHERE id = :id FOR UPDATE")
+              .bind("id", id.getValue());
+
+      var res = handle.createUpdate("UPDATE article SET \"commentsCount\" = :count WHERE id = :id")
+              .bind("id", id.getValue())
+              .bind("count", count)
               .executeAndReturnGeneratedKeys()
               .mapToMap()
               .first();
@@ -116,6 +137,7 @@ public class MySqlArticleRepository implements ArticlesRepository {
     return new Article(new ArticleId((Long) map.get("id")),
             (String) map.get("name"),
             (String[]) tagsStr.getArray(),
-            (Boolean) map.get("trending"));
+            (Boolean) map.get("trending"),
+            (Integer) map.get("commentscount"));
   }
 }

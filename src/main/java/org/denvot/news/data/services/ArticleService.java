@@ -2,6 +2,7 @@ package org.denvot.news.data.services;
 
 import org.denvot.news.data.entities.Article;
 import org.denvot.news.data.entities.ArticleId;
+import org.denvot.news.data.services.entities.ArticleData;
 import org.denvot.news.exceptions.ArticleNotFoundException;
 
 import java.sql.SQLException;
@@ -30,9 +31,21 @@ public class ArticleService implements BaseArticleService {
   }
 
   @Override
-  public long createArticle(String name, String[] tags) {
-    return articleRepository.createArticle(name, tags);
+  public long createArticle(ArticleData articleData) {
+    return articleRepository.createArticle(articleData);
   }
+
+  @Override
+  public long[] createArticles(List<ArticleData> articleData) {
+    long[] res = new long[articleData.size()];
+
+    for (int i = 0; i < articleData.size(); i++) {
+      res[i] = createArticle(articleData.get(i));
+    }
+
+    return res;
+  }
+
 
   @Override
   public void deleteArticle(ArticleId articleId) {

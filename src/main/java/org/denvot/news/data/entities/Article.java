@@ -5,12 +5,14 @@ public class Article {
   private final String name;
   private final String[] tags;
   private final boolean trending;
+  private final int commentsCount;
 
-  public Article(ArticleId id, String name, String[] tags, boolean trending) {
+  public Article(ArticleId id, String name, String[] tags, boolean trending, int commentsCount) {
     this.id = id;
     this.name = name;
     this.tags = tags;
     this.trending = trending;
+    this.commentsCount = commentsCount;
   }
 
   public ArticleId getId() {
@@ -27,5 +29,9 @@ public class Article {
 
   public boolean isTrending() {
     return trending;
+  }
+
+  public int getCommentsCount() {
+    return commentsCount;
   }
 }
