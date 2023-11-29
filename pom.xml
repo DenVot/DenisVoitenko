@@ -109,7 +109,9 @@
           <excludes>
             <exclude>**/*Main.*</exclude>
             <exclude>**/*Application.*</exclude>
+            <exclude>**/*ArticlesViewsController.*</exclude>
             <exclude>**/responses/*</exclude>
+            <exclude>**/exceptions/*</exclude>
           </excludes>
         </configuration>
         <executions>
