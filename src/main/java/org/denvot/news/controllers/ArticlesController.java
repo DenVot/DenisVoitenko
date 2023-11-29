@@ -1,35 +1,44 @@
 package org.denvot.news.controllers;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.denvot.news.data.services.ArticlesRepository;
+import org.denvot.news.controllers.requests.CreateArticleRequest;
+import org.denvot.news.controllers.responses.ArticleResponse;
+import org.denvot.news.controllers.responses.ErrorResponse;
+import org.denvot.news.data.entities.Article;
+import org.denvot.news.data.entities.ArticleId;
+import org.denvot.news.data.services.BaseArticleService;
+import org.denvot.news.exceptions.ArticleNotFoundException;
+import org.eclipse.jetty.http.HttpStatus;
+import spark.Response;
 import spark.Service;
 
 public class ArticlesController implements ControllerBase {
   private final Service sparkService;
-  private final ArticlesRepository articleRepository;
+  private final BaseArticleService articleService;
   private final ObjectMapper objectMapper;
 
   public ArticlesController(Service sparkService,
-                            ArticlesRepository articleRepository,
+                            BaseArticleService articleService,
                             ObjectMapper objectMapper) {
     this.sparkService = sparkService;
-    this.articleRepository = articleRepository;
+    this.articleService = articleService;
     this.objectMapper = objectMapper;
   }
 
   @Override
   public void initializeEndpoints() {
-    /*getAllArticles();
+    getAllArticles();
     getArticle();
     createArticle();
     deleteArticles();
-    editArticle();*/
+    editArticle();
   }
 
-  /*private void getAllArticles() {
+  private void getAllArticles() {
     sparkService.get("/api/articles", (request, response) -> {
       response.type("application/json");
-      var articles = articleRepository.getAllArticles();
+      var articles = articleService.getAllArticles();
 
       setupSuccessJsonResponse(response);
       return objectMapper.writeValueAsString(ArticleResponse.fromOriginal(articles));
@@ -43,16 +52,12 @@ public class ArticlesController implements ControllerBase {
         var articleId = new ArticleId(
                 Long.parseLong(request.params("articleId")));
 
-        var article = articleRepository.getArticle(articleId);
-
-        if (article.isEmpty()) {
-          return error("Article not found");
-        }
+        var article = articleService.getArticle(articleId);
 
         setupSuccessJsonResponse(response);
-        return objectMapper.writeValueAsString(ArticleResponse.fromOriginal(article.get()));
-      } catch (NumberFormatException e) {
-        response.status(403);
+        return objectMapper.writeValueAsString(ArticleResponse.fromOriginal(article));
+      } catch (NumberFormatException | ArticleNotFoundException e) {
+        response.status(HttpStatus.BAD_REQUEST_400);
 
         return error(e.getMessage());
       }
@@ -64,13 +69,11 @@ public class ArticlesController implements ControllerBase {
       response.type("application/json");
       var body = request.body();
       var createArticleRequest = objectMapper.readValue(body, CreateArticleRequest.class);
-
-      var tagsSet = new HashSet<>(Arrays.asList(createArticleRequest.tags()));
       try {
-        var article = articleRepository.createArticle(createArticleRequest.name(), tagsSet);
+        var articleId = articleService.createArticle(createArticleRequest.name(), createArticleRequest.tags());
 
         setupSuccessJsonResponse(response);
-        return objectMapper.writeValueAsString(ArticleResponse.fromOriginal(article));
+        return objectMapper.writeValueAsString(articleId);
       } catch (Exception e) {
         return error(e.getMessage());
       }
@@ -84,7 +87,7 @@ public class ArticlesController implements ControllerBase {
         var articleId = new ArticleId(
                 Long.parseLong(request.params("articleId")));
 
-        articleRepository.deleteArticle(articleId);
+        articleService.deleteArticle(articleId);
 
         setupSuccessJsonResponse(response);
 
@@ -106,12 +109,11 @@ public class ArticlesController implements ControllerBase {
       Article editedArticle = null;
 
       if (newName != null) {
-        editedArticle = articleRepository.editName(id, newName);
+        editedArticle = articleService.editName(id, newName);
       }
 
       if (newTagsStr != null) {
-        var newTags = new HashSet<>(Arrays.asList(newTagsStr.split(",")));
-        editedArticle = articleRepository.editTags(id, newTags);
+        editedArticle = articleService.editTags(id, newTagsStr.split(","));
       }
 
       if (editedArticle == null) {
@@ -130,5 +132,5 @@ public class ArticlesController implements ControllerBase {
 
   private String error(String msg) throws JsonProcessingException {
     return objectMapper.writeValueAsString(new ErrorResponse(msg));
-  }*/
+  }
 }

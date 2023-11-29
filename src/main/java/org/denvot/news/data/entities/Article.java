@@ -4,11 +4,13 @@ public class Article {
   private final ArticleId id;
   private final String name;
   private final String[] tags;
+  private final boolean trending;
 
-  public Article(ArticleId id, String name, String[] tags) {
+  public Article(ArticleId id, String name, String[] tags, boolean trending) {
     this.id = id;
     this.name = name;
     this.tags = tags;
+    this.trending = trending;
   }
 
   public ArticleId getId() {
@@ -21,5 +23,9 @@ public class Article {
 
   public String[] getTags() {
     return tags;
+  }
+
+  public boolean isTrending() {
+    return trending;
   }
 }

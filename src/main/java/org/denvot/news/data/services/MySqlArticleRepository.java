@@ -91,7 +91,7 @@ public class MySqlArticleRepository implements ArticlesRepository {
     return jdbi.inTransaction(handle -> {
       var res = handle.createUpdate("UPDATE article SET trending = :trending WHERE id = :id")
               .bind("id", id.getValue())
-              .bind("tags", isTrending)
+              .bind("trending", isTrending)
               .executeAndReturnGeneratedKeys()
               .mapToMap()
               .first();
@@ -104,7 +104,8 @@ public class MySqlArticleRepository implements ArticlesRepository {
   public void deleteArticle(ArticleId id) {
     jdbi.inTransaction(handle -> {
       handle.createUpdate("DELETE FROM article WHERE id = :id")
-              .bind("id", id.getValue());
+              .bind("id", id.getValue())
+              .execute();
       return null;
     });
   }
@@ -114,6 +115,7 @@ public class MySqlArticleRepository implements ArticlesRepository {
 
     return new Article(new ArticleId((Long) map.get("id")),
             (String) map.get("name"),
-            (String[]) tagsStr.getArray());
+            (String[]) tagsStr.getArray(),
+            (Boolean) map.get("trending"));
   }
 }

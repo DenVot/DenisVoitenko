@@ -5,6 +5,7 @@ import org.denvot.news.data.entities.Comment;
 import org.denvot.news.data.entities.CommentId;
 import org.jdbi.v3.core.Jdbi;
 
+import java.util.List;
 import java.util.Map;
 
 public class MySqlCommentsRepository implements CommentsRepository {
@@ -25,38 +26,44 @@ public class MySqlCommentsRepository implements CommentsRepository {
 
   @Override
   public long createComment(ArticleId articleId, String text) {
-    return jdbi.inTransaction(handle -> (Long) handle.createUpdate(
-              "INSERT INTO comment VALUES (:text)")
-            .executeAndReturnGeneratedKeys()
-            .mapToMap()
-            .first().get("id"));
+    return jdbi.inTransaction(handle -> {
+      var result = handle.createUpdate(
+                      "INSERT INTO comment (\"articleId\", text) VALUES (:articleId, :text)")
+              .bind("articleId", articleId.getValue())
+              .bind("text", text)
+              .executeAndReturnGeneratedKeys();
+
+      var mapRes = result.mapToMap().first();
+
+      return (Long) mapRes.get("id");
+    });
   }
 
   @Override
   public void deleteComment(CommentId commentId) {
     jdbi.inTransaction(handle -> {
-      handle.createUpdate("DELETE FROM article WHERE id = :id")
+      handle.createUpdate("DELETE FROM comment WHERE id = :id")
               .bind("id", commentId.getValue())
-              .executeAndReturnGeneratedKeys();
+              .execute();
 
       return null;
     });
   }
 
   @Override
-  public Comment[] getCommentsByArticle(ArticleId articleId) {
-    return jdbi.inTransaction(handle -> (Comment[]) handle.select(
+  public List<Comment> getCommentsByArticle(ArticleId articleId) {
+    return jdbi.inTransaction(handle -> handle.select(
               "SELECT * FROM comment WHERE \"articleId\" = :articleId")
             .bind("articleId", articleId.getValue())
             .mapToMap()
             .stream()
             .map(MySqlCommentsRepository::parseCommentFromMap)
-            .toArray());
+            .toList());
   }
 
   private static Comment parseCommentFromMap(Map<String, Object> map) {
     return new Comment(new CommentId((Long) map.get("id")),
-            new ArticleId((Long) map.get("articleId")),
+            new ArticleId((Long) map.get("articleid")),
             (String) map.get("text"));
   }
 }

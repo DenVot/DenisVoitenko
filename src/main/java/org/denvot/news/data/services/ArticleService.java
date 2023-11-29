@@ -19,7 +19,7 @@ public class ArticleService implements BaseArticleService {
   public Article getArticle(ArticleId id) throws ArticleNotFoundException {
     try {
       return articleRepository.getArticle(id);
-    } catch (SQLException e) {
+    } catch (IllegalStateException | SQLException e) {
       throw new ArticleNotFoundException();
     }
   }
@@ -43,7 +43,7 @@ public class ArticleService implements BaseArticleService {
   public Article editName(ArticleId id, String newName) throws ArticleNotFoundException {
     try {
       return articleRepository.editName(id, newName);
-    } catch (SQLException e) {
+    } catch (IllegalStateException | SQLException e) {
       throw new ArticleNotFoundException();
     }
   }
@@ -52,7 +52,7 @@ public class ArticleService implements BaseArticleService {
   public Article editTags(ArticleId id, String[] newTags) throws ArticleNotFoundException {
     try {
       return articleRepository.editTags(id, newTags);
-    } catch (SQLException e) {
+    } catch (IllegalStateException | SQLException e) {
       throw new ArticleNotFoundException();
     }
   }
@@ -61,7 +61,7 @@ public class ArticleService implements BaseArticleService {
   public Article editTrending(ArticleId id, boolean isTrending) throws ArticleNotFoundException {
     try {
       return articleRepository.editTrending(id, isTrending);
-    } catch (SQLException e) {
+    } catch (IllegalStateException | SQLException e) {
       throw new ArticleNotFoundException();
     }
   }
